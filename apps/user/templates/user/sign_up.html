@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sign_up</title>
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/user.css' %}">
+</head>
+<body>
+<div class="sign-up-container">
+    <img style="margin-top: 50px" src="{% static 'images/user/logo.png' %}" alt="">
+
+    <form class="sign-up-form" action="" method="post">
+        {% if message %}
+            <span class="wrong">{{ message }}</span>
+        {% endif %}
+        {% csrf_token %}
+        <span>{{ form.contact.errors }}</span>
+        {{ form.contact }}
+        <span>{{ form.full_name.errors }}</span>
+        {{ form.full_name }}
+        <span>{{ form.user_name.errors }}</span>
+        {{ form.user_name }}
+        <span>{{ form.password.errors }}</span>
+        {{ form.password }}
+
+        <button class="btn">Sign Up</button>
+    </form>
+    <p class="login-span">Have an account? <a href="{% url 'login' %}"> Log in</a></p>
+</div>
+<script src="{% static 'js/user/user.js' %}"></script>
+</body>
+</html>

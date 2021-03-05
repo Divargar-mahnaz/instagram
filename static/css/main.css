@@ -1,0 +1,402 @@
+/*general*/
+.layout {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: auto 100vh;
+    grid-template-areas:
+    "header header "
+    "main sidebar  ";
+}
+
+.custom-btn {
+    width: 50px;
+    height: 25px;
+    font-family: IRANSans;
+    font-size: 12px;
+    color: white;
+    outline: none;
+    border: none;
+    background: rgb(0, 149, 246);
+    border-radius: 5px;
+}
+
+.font {
+    font-family: IRANSans;
+}
+
+.index {
+    font-family: IRANSans;
+    font-size: 11px;
+    color: #5c636a;
+}
+
+.profile {
+    border-radius: 50%;
+}
+
+.dp_flex_align {
+    display: flex;
+    align-items: center;
+}
+
+.margin_left {
+    margin-left: 30px;
+}
+
+.margin_top {
+    margin-top: 10px;
+}
+
+/*header*/
+.item-a {
+    width: 100%;
+    grid-area: header;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid #D0D0D0;
+    background: white;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15%;
+    height: 50px;
+
+}
+
+.autocomplete_use_input {
+    font-family: IRANSans;
+    width: 170px;
+    height: 25px;
+    border: 2px solid #D0D0D0;
+    outline: none;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+#ui-id-1 {
+    font-family: IRANSans;
+    border: 2px solid #D0D0D0;
+    border-radius: 5px;
+}
+
+#ui-id-1 li {
+    border-bottom: 1px solid #D0D0D0;;
+}
+
+.item-a .links a {
+    margin: 0 10px;
+}
+
+
+.item-b {
+    grid-area: main;
+    width: 100%;
+}
+
+.main_container {
+    padding: 30px 15%;
+}
+
+/*******************side bar***********************/
+.item-c {
+    grid-area: sidebar;
+    padding: 50px 10px;
+
+}
+
+.item-c .search_bar {
+    height: 50px;
+    font-size: 18px;
+
+}
+
+/*************POST*************/
+.original-btn {
+    width: 50px;
+    height: 25px;
+    outline: none;
+    background: #ffffff;
+    border-radius: 5px;
+    color: #CACACA;
+    border: 2px solid #D0D0D0;
+    font-family: IRANSans;
+    cursor: pointer;
+}
+
+.add_post_form {
+    color: #CACACA;
+}
+
+.add_post_form table {
+    border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.add_post_form td {
+    padding: 10px 20px;
+}
+
+.add_post_form input[type=text] {
+    width: 170px;
+    height: 25px;
+    border: 2px solid #D0D0D0;
+    outline: none;
+    border-radius: 5px;
+    font-family: IRANSans;
+}
+
+#id_image {
+    font-family: IRANSans;
+}
+
+::-webkit-file-upload-button {
+    width: 100px;
+    height: 25px;
+    outline: none;
+    background: #ffffff;
+    border-radius: 5px;
+    color: #CACACA;
+    border: 2px solid #D0D0D0;
+    font-family: IRANSans;
+}
+
+.add_post_form textarea {
+    font-family: IRANSans;
+    width: 300px;
+    height: 200px;
+    border: 2px solid #D0D0D0;
+    outline: none;
+    border-radius: 5px;
+}
+
+
+.user_info {
+    width: 100%;
+    display: flex;
+
+}
+
+.info {
+    margin-left: 50px;
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.info h2 {
+    font-family: IRANSansUlt;
+    margin-bottom: 10px;
+}
+
+.eng_number {
+    font-family: Tahoma !important;
+    font-size: 13px;
+}
+
+.personal_post_layout {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+    grid-auto-flow: dense;
+}
+
+.personal_post_layout img {
+    width: 100%;
+    height: 250px;
+    border-radius: 5px;
+    -webkit-box-shadow: 5px 4px 5px -3px rgba(115, 111, 115, 1);
+    -moz-box-shadow: 5px 4px 5px -3px rgba(115, 111, 115, 1);
+    box-shadow: 5px 4px 5px -3px rgba(115, 111, 115, 1);
+}
+
+.personal_post_layout img:hover {
+    opacity: 0.8;
+}
+
+
+/*Detail Post*/
+.popup_simulation {
+    width: 100vw;
+    height: 100vh;
+    background: #767676;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.post_content {
+    font-family: IRANSans;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows:repeat(1, 500px);
+    width: 60%;
+    height: 500px;
+    background: white;
+
+}
+
+.cancel {
+    width: 15px;
+    height: 15px;
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.post_content > img {
+    width: 100%;
+    height: 100%;
+}
+
+.post_content_left {
+    margin: 15px 10px;
+    position: relative;
+}
+
+.post_content_left > p {
+    height: 300px;
+    overflow: hidden;
+    font-family: IRANSans;
+
+}
+
+.comment_textarea {
+    padding: 10px;
+    height: 20px;
+    resize: none;
+    width: 80%;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-family: IRANSans;
+    overflow: hidden;
+}
+
+.comment input[type=submit] {
+    background: white;
+    color: #0b5ed7;
+    font-family: IRANSans;
+    font-size: 13px;
+    border: none;
+    outline: none;
+}
+
+/***************************popup********************************/
+.myBtn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: 300px;
+    overflow: auto;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content > div {
+    width: 670px;
+    padding: 10px 20px;
+    font-family: IRANSans;
+    border-bottom: 1px solid #c5c5c5;
+}
+
+/**********************HOME PAGE**********************/
+.post {
+    margin: 20px 0;
+}
+
+.header {
+    width: 95%;
+    border: 1px solid #D0D0D0;
+    display: flex;
+    align-items: center;
+    margin: 3px 0;
+    padding: 10px 10px;
+}
+
+.footer-post {
+    width: 95%;
+    border: 1px solid #D0D0D0;
+    margin: 3px 0;
+    padding: 10px 10px;
+
+}
+
+.post_content_home_page {
+    margin: 15px auto;
+    width: 350px;
+    font-size: 11px;
+    direction: rtl;
+
+}
+
+/*responsive */
+@media (max-width: 1100px) {
+    .info {
+        font-size: 12px !important;
+    }
+
+    .info p {
+        font-size: 14px !important;
+        width: 270px !important;
+
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .user_info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .info {
+        margin: 30px 0;
+    }
+}

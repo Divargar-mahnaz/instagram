@@ -1,0 +1,86 @@
+/* sing_up Page*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: IRANSans;
+    font-size: 13px;
+    background: #F3F3F3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.sign-up-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    height: 450px;
+    background: #fff;
+    border: 0.5px solid #DFDFDF;
+}
+
+.sign-up-form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+
+}
+
+
+.sign-up-form li {
+    font-family: IRANSans;
+    font-size: 12px;
+    width: 250px;
+    list-style: none;
+    margin: 0 auto;
+
+}
+
+.sign-up-form input {
+    width: 230px;
+    height: 30px;
+    font-family: IRANSans;
+    border: none;
+    border-radius: 5px;
+    background: #F3F3F3;
+    margin: 10px auto;
+    outline: none;
+    padding: 0 10px;
+    text-align: justify;
+}
+
+.btn {
+    background: rgb(0, 149, 246);
+    width: 250px;
+    height: 30px;
+    border: none;
+    color: #ffffff;
+    font-family: IRANSans;
+    border-radius: 5px;
+    margin: 10px auto;
+    outline: none;
+}
+
+.sign-up-container .login-span {
+    font-family: IRANSans;
+    font-size: 13px;
+}
+
+.sign-up-container .login-span a {
+    color: blue;
+    text-decoration: none;
+}
+
+.wrong {
+    color: red;
+    opacity: 0.6;
+    font-family: IRANSans;
+    font-size: 13px;
+
+}

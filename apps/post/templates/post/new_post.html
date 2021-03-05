@@ -1,0 +1,52 @@
+{% extends 'bace.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block profile %}{% get_img 'User' user.slug %}{% endblock %}
+{% block title %}New Post{% endblock %}
+{% block home_url %}{% url 'home' user.slug %}{% endblock %}
+{% block add_url %}{% url 'new_post' user.slug %}{% endblock %}
+{% block profile_url %}{% url 'profile' user.slug %}{% endblock %}
+{% block main %}
+    <form class="add_post_form font" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>
+                    Location
+                </th>
+                <td>
+                    {{ form.location.errors }}
+                    {{ form.location }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Caption
+                </th>
+                <td>
+                    {{ form.content.errors }}
+                    {{ form.content }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Image
+                </th>
+                <td>
+                    {{ form.image.errors }}
+                    {{ form.image }}
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <button class="original-btn">save</button>
+                </td>
+            </tr>
+
+        </table>
+
+
+    </form>
+{% endblock %}
+

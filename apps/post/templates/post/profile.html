@@ -1,0 +1,80 @@
+{% extends 'bace.html' %}
+{% load static %}
+{% load i18n %}
+{% load custom_tags %}
+{% block profile %}{% get_img 'User' user.slug %}{% endblock %}
+{% block title %}{% translate Profile %}{% endblock %}
+{% block home_url %}{% url 'home' user.slug %}{% endblock %}
+{% block add_url %}{% url 'new_post' user.slug %}{% endblock %}
+{% block profile_url %}{% url 'profile' user.slug %}{% endblock %}
+{% block main %}
+    <div class="user_info">
+        <div>
+            <img class="profile" src="{% get_img 'User' user.slug %}" alt="profile" height="150px" width="150px">
+        </div>
+        <div class="info">
+            <h2>{{ user.user_name }}</h2>
+            <div>
+                <span><span class="eng_number">{{ user.post_set.count }}</span>
+                    {% translate 'post' %}{{ user.post_set.count|pluralize }}</span>
+                <span class="margin_left">
+                    <span class="eng_number">{{ user.followers.count }}</span>
+                    <button id="my-followers-Btn" class="myBtn">{% translate 'followers' %}</button>
+                    <div id="my-followers-Modal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content" style="width: 450px">
+                        <span class="close">&times;</span>
+                        {% for followers in user.followers.all %}
+                            <div style="width: 400px !important;">
+                                <img class="profile" src="{{ followers.image.url }}" width="35px" height="35px"
+                                     alt="">
+                                <a href="{% url 'general_profile' user.slug followers.slug %}"><span
+                                        class="index">{{ followers.user_name }}</span></a>
+
+                            </div>
+
+                        {% endfor %}
+                    </div>
+
+                    </div>
+                </span>
+
+                <span class="margin_left">
+                    <span class="eng_number">{{ user.following.count }}</span>
+                    <button id="my-following-Btn" class="myBtn">{% translate 'following' %}</button>
+                    <div id="my-following-Modal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content" style="width: 450px">
+                        <span class="close">&times;</span>
+                        {% for following in user.following.all %}
+                            <div style="width: 400px !important;">
+                                <img class="profile" src="{{ following.image.url }}" width="35px" height="35px"
+                                     alt="">
+                                <a href="{% url 'general_profile' user.slug following.slug %}"><span
+                                        class="index">{{ following.user_name }}</span></a>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    </div>
+                </span>
+
+                <h4 class="margin_top">{{ user.full_name }}</h4>
+                <p style="height: 100px;width:300px;margin-top: 5px;font-weight: 100" class="margin_top">
+                    {{ user.bio }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr style="margin-bottom: 20px">
+    <div class="personal_post_layout_container">
+        <div class="personal_post_layout">
+            {% for post in user.post_set.all %}
+
+                <a href="{% url 'post_detail' user.slug post.id %}"><img src="{{ post.image.url }}" alt=""></a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

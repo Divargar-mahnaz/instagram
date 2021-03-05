@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/user.css' %}">
+</head>
+<body>
+<div class="sign-up-container">
+    <img style="margin-top: 50px" src="{% static 'images/user/logo.png' %}" alt="">
+    <form class="sign-up-form" action="" method="post">
+        {% csrf_token %}
+        {{ form.user_name }}
+        {{ form.password }}
+
+        <button class="btn">Log in</button>
+    </form>
+    <p class="login-span">Create an account? <a href="{% url 'sign_up' %}"> Sign Up</a></p>
+    {% if message %}
+        <span class="wrong">{{ message }}</span>
+    {% endif %}
+</div>
+<script>
+    document.getElementById("id_user_name").placeholder = "Phone number,  username,or  email ";
+    document.getElementById("id_password").placeholder = "Password";
+</script>
+</body>
+</html>
