@@ -24,9 +24,19 @@
             <a href="{% block add_url %}{% endblock %}"><img src="{% static 'images/logo/add.svg' %}" alt="Add"
                                                              width="20px"
                                                              height="20px"></a>
-            <a href="{% block profile_url %}{% endblock %}"><img class="profile" src="{% block profile %}{% endblock %}"
-                                                                 alt="Profile" width="30px"
-                                                                 height="30px"></a>
+            <a href="{% block account_activity %}{% endblock %}"><img src="{% static 'images/heart (3).svg' %}"
+                                                                      width="20px"
+                                                                      height="20px"></a>
+            <div class="dropdown" style="display: inline-block">
+                <a href="{% block profile_url %}{% endblock %}"><img class="profile" src="
+                        {% block profile %}{% endblock %}"
+                                                                     alt="Profile" width="30px"
+                                                                     height="30px"></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'logout' %}">Logout</a>
+                    <a href="{% url 'edit_profile' user.slug %}">Edit Profile</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -45,7 +55,7 @@
     <ul id="search_list" style="margin-top: 20px">
         {% get_all_user user as all_user %}
         {% for selected_user in all_user %}
-            <a href="{% url 'general_profile' user.slug selected_user.slug %}">
+            <a href="{% url 'general_profile'  selected_user.slug %}">
                 <li class="search_bar">
                     <img class="profile" width="35px" height="35px" src="{{ selected_user.image.url }}"
                          alt="{% translate 'user_profile' %}">
@@ -72,7 +82,7 @@
                         for (var x = 0; x < data.length; x++) {
                             var content;
                             var owner_slug = data[x]['slug'];
-                            content = "<a href='{% url 'general_profile' user.slug 0 %}'><li class='search_bar'>".replace('0', owner_slug);
+                            content = "<a href='{% url 'general_profile'  0 %}'><li class='search_bar'>".replace('0', owner_slug);
                             content += "<img class='profile' width='35px' height='35px' src='{{0}}'alt='{% translate 'user_profile' %}'>".replace('0', data[x]['image']);
                             content += "<span class='index'>{{ 0}}</span>".replace('0', data[x]['user_name']);
                             content += "</li></a>"

@@ -1,20 +1,24 @@
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-import hashlib
-from common.validators import check_password, check_website, check_phone_number, check_user_name
 from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
+
+from common.validators import  check_website, check_phone_number, check_user_name
+from .follow import Follow
+from ..managers import UserManager
 
 
 def my_slugify_function(content):
     return slugify(content, allow_unicode=True)
 
 
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     this class is create for user info
     """
     user_name = models.CharField('Username', max_length=100, unique=True, validators=[check_user_name])
-    password = models.CharField('Password', max_length=64, validators=[check_password])
     image = models.ImageField('Image', upload_to='user', blank=True, null=True, default='user/default_profile.png')
     full_name = models.CharField('Full Name', max_length=100, blank=True)
     GENDER = [('F', 'female'), ('M', 'male')]
@@ -24,19 +28,44 @@ class User(models.Model):
     phone_number = models.CharField('Phone number', max_length=11, blank=True, null=True, unique=True,
                                     validators=[check_phone_number])
     email = models.EmailField('Email', blank=True, null=True, unique=True)
-    following = models.ManyToManyField('self', verbose_name='follow', blank=True, symmetrical=False,
-                                       related_name='followers')
+    request_to = models.ManyToManyField('user.User', verbose_name='follow', symmetrical=False, through='user.Follow',
+                                        related_name='request_from')
     slug = AutoSlugField(populate_from=['user_name'], unique=True, allow_unicode=True,
                          slugify_function=my_slugify_function)
+    is_active = models.BooleanField(_('active'), default=True)
+    is_superuser = models.BooleanField(_('superuser'), default=False)
+    is_staff = models.BooleanField(_('staff'), default=False)
 
-    def save(self, *args, **kwargs):
-        """
-        we want to hash password so before save convert it
-        """
-        if self.id is None:
-            self.password = hashlib.sha256(self.password.encode('utf-8')).hexdigest()
+    objects = UserManager()
+    USERNAME_FIELD = 'user_name'
+    REQUIRED_FIELDS = []
 
-        super(User, self).save(*args, **kwargs)
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+        app_label = 'user'
+
+    @property
+    def following(self):
+        following = []
+        for obj in Follow.objects.filter(from_user=self, accept=True):
+            following.append(obj.to_user.id)
+        following = User.objects.filter(id__in=following)
+        return following
+
+    @property
+    def followers(self):
+        followers = []
+        for obj in Follow.objects.filter(to_user=self, accept=True):
+            followers.append(obj.from_user.id)
+        followers = User.objects.filter(id__in=followers)
+        return followers
+
+    def get_full_name(self):
+        return self.full_name
+
+    def get_short_name(self):
+        return self.full_name
 
     def __str__(self):
         return self.user_name

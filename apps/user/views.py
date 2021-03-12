@@ -4,15 +4,12 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
 from django.http import JsonResponse
-import hashlib
-
+from django.views.generic import UpdateView
 from rest_framework.views import APIView
 
-from apps.user.forms import SignUpForm, LoginForm
+from apps.user.forms import SignUpForm, UserUpdateForm
 from apps.user.models import User
 from apps.user.serializers import UserSerializer
-from common.constant import PHONE_PATTERN, EMAIL_PATTERN
-from django.db import IntegrityError
 
 
 class SignUp(View):
@@ -29,57 +26,14 @@ class SignUp(View):
     def post(self, request):
         import re
         form = SignUpForm(request.POST)
+
         message = ''
         if form.is_valid():
-            if re.search(PHONE_PATTERN, form.cleaned_data['contact']):
-                try:
-                    user = User(user_name=form.cleaned_data['user_name'],
-                                password=form.cleaned_data['password'],
-                                full_name=form.cleaned_data['full_name'],
-                                phone_number=form.cleaned_data['contact'])
-                    user.save()
-                    return redirect(reverse('login'))
-                except IntegrityError as e:  # because phone and email are unique
-                    if 'UNIQUE constraint failed:' in e.args[0]:
-                        message = 'phone is not unique'
-
-            elif re.search(EMAIL_PATTERN, form.cleaned_data['contact']):
-                try:
-                    user = User(user_name=form.cleaned_data['user_name'],
-                                password=form.cleaned_data['password'],
-                                full_name=form.cleaned_data['full_name'],
-                                email=form.cleaned_data['contact'])
-                    user.save()
-                    return redirect(reverse('login'))
-                except IntegrityError as e:  # because phone and email are unique
-                    if 'UNIQUE constraint failed:' in e.args[0]:
-                        message = 'email  is not unique'
+            print(form.cleaned_data)
+            form.save()
+            return redirect(reverse('login'))
 
         return render(request, 'user/sign_up.html', {'form': form, 'message': message})
-
-
-class Login(View):
-    """
-    for login give two required field username and password
-    username can be username, email and phone because are unique
-    """
-
-    def get(self, request):
-        form = LoginForm()
-        return render(request, 'user/login.html', {'form': form})
-
-    def post(self, request):
-        form = LoginForm(request.POST)
-        username = request.POST.get('user_name')
-        password = hashlib.sha256(request.POST.get('password').encode('utf-8')).hexdigest()
-        user = User.objects.filter(
-            (Q(user_name=username) | Q(phone_number=username) | Q(email=username)) & Q(password=password))
-        if user:
-            return redirect(reverse('home', args=(user[0].slug,)))
-        else:
-            message = 'Sorry, your password or username was incorrect.'
-
-        return render(request, 'user/login.html', {'form': form, 'message': message})
 
 
 class UserAutocomplete(View):
@@ -102,10 +56,23 @@ class UserAutocomplete(View):
 class FilterUser(APIView):
     def get(self, request, slug):
         user_name = request.GET.get('username')
-        print(user_name)
         if user_name:
             user = User.objects.exclude(slug=slug).filter(user_name__icontains=user_name)
         else:
             user = User.objects.exclude(slug=slug)
         user = UserSerializer(user, many=True)
         return JsonResponse(user.data, safe=False)
+
+
+class UpdateUserProfile(UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'user/edit_user.html'
+
+    def get_success_url(self, **kwargs):
+        return reverse("profile")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

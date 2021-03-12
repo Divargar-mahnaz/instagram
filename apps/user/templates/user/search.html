@@ -20,7 +20,7 @@
     });
     $(document).on('click', '#ui-id-1 li', function () {
         var div = $(this).find('div').text();
-        window.location.href = "{% url 'general_profile' user.slug 0 %}".replace(0, div);
+        window.location.href = "{% url 'general_profile'  0 %}".replace(0, div);
     });
 
 </script>

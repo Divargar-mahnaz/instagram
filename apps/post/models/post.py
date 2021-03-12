@@ -1,7 +1,7 @@
 from django.db import models
 from .comment import Comment
 from django.utils import timezone
-
+from django.conf import settings
 
 class Post(models.Model):
     """
@@ -11,12 +11,12 @@ class Post(models.Model):
     evre post can have many like and coment
     """
     create_date = models.DateTimeField(auto_now_add=True)
-    publisher = models.ForeignKey('user.User', on_delete=models.CASCADE)
+    publisher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     location = models.CharField('Location', max_length=200, blank=True)
     image = models.ImageField('Image', upload_to='posts')
     content = models.TextField('Content', blank=True)
-    like = models.ManyToManyField('user.User', verbose_name='Like', blank=True, related_name='likes_set')
-    comments = models.ManyToManyField('user.User', through=Comment, related_name='comments_set')
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Like', blank=True, related_name='likes_set')
+    comments = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Comment, related_name='comments_set')
 
     class Meta:
         ordering = ['-create_date']

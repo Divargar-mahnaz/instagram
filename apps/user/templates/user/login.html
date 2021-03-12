@@ -11,21 +11,37 @@
 <body>
 <div class="sign-up-container">
     <img style="margin-top: 50px" src="{% static 'images/user/logo.png' %}" alt="">
-    <form class="sign-up-form" action="" method="post">
-        {% csrf_token %}
-        {{ form.user_name }}
-        {{ form.password }}
 
-        <button class="btn">Log in</button>
-    </form>
-    <p class="login-span">Create an account? <a href="{% url 'sign_up' %}"> Sign Up</a></p>
-    {% if message %}
-        <span class="wrong">{{ message }}</span>
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
     {% endif %}
+    <form method="post" class="sign-up-form" action="{% url 'login' %}">
+        {% if form.errors %}
+            <p class="wrong" style="font-size: 11px;width: 250px">Your username and password didn't match. Please try
+                again.</p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form.username }}
+        {{ form.password }}
+        <button type="submit" value="login" class="btn" onfocus="this.value=''">login</button>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <p class="login-span">Create an account? <a href="{% url 'sign_up' %}"> Sign Up</a></p>
 </div>
+
 <script>
-    document.getElementById("id_user_name").placeholder = "Phone number,  username,or  email ";
+    document.getElementById("id_username").placeholder = "username";
+    document.getElementById("id_username").value= "";
     document.getElementById("id_password").placeholder = "Password";
+
+
 </script>
 </body>
 </html>

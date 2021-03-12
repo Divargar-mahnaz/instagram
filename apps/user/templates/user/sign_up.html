@@ -11,24 +11,33 @@
 <body>
 <div class="sign-up-container">
     <img style="margin-top: 50px" src="{% static 'images/user/logo.png' %}" alt="">
+    <form method="post" class="sign-up-form">
 
-    <form class="sign-up-form" action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div style="margin:7px auto;width: 250px;">
+                {#                {% if field.help_text %}#}
+                {#                    <small style="color: grey;font-size: 11px">{{ field.help_text }}</small>#}
+                {#                {% endif %}#}
+                {% for error in field.errors %}
+                    <p style="color: red;font-size: 11px">{{ error }}</p>
+
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+                {{ field }}
+            </div>
+        {% endfor %}
         {% if message %}
             <span class="wrong">{{ message }}</span>
         {% endif %}
-        {% csrf_token %}
-        <span>{{ form.contact.errors }}</span>
-        {{ form.contact }}
-        <span>{{ form.full_name.errors }}</span>
-        {{ form.full_name }}
-        <span>{{ form.user_name.errors }}</span>
-        {{ form.user_name }}
-        <span>{{ form.password.errors }}</span>
-        {{ form.password }}
+        <button type="submit" class="btn">Sign up</button>
 
-        <button class="btn">Sign Up</button>
     </form>
     <p class="login-span">Have an account? <a href="{% url 'login' %}"> Log in</a></p>
+
+
 </div>
 <script src="{% static 'js/user/user.js' %}"></script>
 </body>

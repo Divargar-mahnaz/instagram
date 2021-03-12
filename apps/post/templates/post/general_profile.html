@@ -4,9 +4,10 @@
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
 {% block title %}{% translate Profile %}{% endblock %}
-{% block home_url %}{% url 'home' user.slug %}{% endblock %}
-{% block add_url %}{% url 'new_post' user.slug %}{% endblock %}
-{% block profile_url %}{% url 'profile' user.slug %}{% endblock %}
+{% block home_url %}{% url 'home' %}{% endblock %}
+{% block add_url %}{% url 'new_post' %}{% endblock %}
+{% block account_activity %}{% url 'account_activity' %}{% endblock %}
+{% block profile_url %}{% url 'profile' %}{% endblock %}
 {% block main %}
     <div class="user_info">
         <div>
@@ -14,12 +15,19 @@
         </div>
         <div class="info">
             {% if owner in user.following.all %}
-                <h2>{{ owner.user_name }}<a href="{% url 'follow' user.slug owner.slug %}" style="margin-left: 10px">
-                    <button class="custom-btn" style="width: 70px;">Unfollow</button>
+                <h2>{{ owner.user_name }}<a href="{% url 'request'  owner.slug %}"
+                                            style="margin-left: 10px;">
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">Unfollow</button>
+                </a></h2>
+            {% elif owner in user.request_to.all %}
+                <h2>{{ owner.user_name }}<a href="{% url 'request' owner.slug %}"
+                                            style="margin-left: 10px">
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">cancel</button>
                 </a></h2>
             {% else %}
-                <h2>{{ owner.user_name }}<a href="{% url 'follow' user.slug owner.slug %}" style="margin-left: 10px">
-                    <button class="custom-btn" style="width: 70px;">follow</button>
+                <h2>{{ owner.user_name }}<a href="{% url 'request'  owner.slug %}"
+                                            style="margin-left: 10px">
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">follow</button>
                 </a></h2>
             {% endif %}
 
@@ -38,7 +46,7 @@
                             <div style="width: 400px !important;">
                                 <img class="profile" src="{{ followers.image.url }}" width="35px" height="35px"
                                      alt="">
-                                <a href="{% url 'general_profile' user.slug followers.slug %}"><span
+                                <a href="{% url 'general_profile'  followers.slug %}"><span
                                         class="index">{{ followers.user_name }}</span></a>
 
                             </div>
@@ -59,7 +67,7 @@
                             <div style="width: 400px !important;">
                                 <img class="profile" src="{{ following.image.url }}" width="35px" height="35px"
                                      alt="">
-                                <a href="{% url 'general_profile' user.slug following.slug %}"><span
+                                <a href="{% url 'general_profile'  following.slug %}"><span
                                         class="index">{{ following.user_name }}</span></a>
 
                             </div>
@@ -80,7 +88,8 @@
     <div class="personal_post_layout_container">
         <div class="personal_post_layout">
             {% for post in owner.post_set.all %}
-                <a href="{% url 'post_detail' user.slug post.id %}"><img src="{{ post.image.url }}" alt=""></a>
+                <a href="{% url 'post_detail' post.id %}?next={{ owner.slug }}"><img src="{{ post.image.url }}"
+                                                                                    alt=""></a>
             {% endfor %}
         </div>
     </div>

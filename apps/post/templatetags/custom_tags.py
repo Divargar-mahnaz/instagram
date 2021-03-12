@@ -46,3 +46,5 @@ def comment_number(post):
 @register.simple_tag
 def get_all_user(login_user):
     return User.objects.exclude(user_name=login_user.user_name)
+
+

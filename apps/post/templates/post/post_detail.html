@@ -15,19 +15,37 @@
     <div class="post_content">
         <img src="{{ object.image.url }}" alt="">
         <div class="post_content_left">
-            <a href="javascript:history.back()"><img
-                    src="{% static 'images/logo/cancel.svg' %}"
-                    class="cancel"></a>
+            {% if  request.GET.next == 'home' %}
+                <a href="{% url 'home' %}"><img src="{% static 'images/logo/cancel.svg' %}" class="cancel"></a>
+            {% elif request.GET.next == 'profile' %}
+                <a href="{% url 'profile' %}"><img src="{% static 'images/logo/cancel.svg' %}" class="cancel"></a>
+            {% else %}
+                <a href="{% url 'general_profile' request.GET.next %}"><img src="{% static 'images/logo/cancel.svg' %}"
+                                                                            class="cancel"></a>
+            {% endif %}
+            {#            <a href=" javascript:history.back()"><img src="{% static 'images/logo/cancel.svg' %}" class="cancel"></a>#}
             <div class="dp_flex_align">
                 <img class="profile" src="{{ post.publisher.image.url }}" width="35px"
-                     height="35px"><span style="margin-left: 10px">{{ post.publisher.user_name }}</span>
+                     height="35px"><span style="margin-left: 10px">{{ post.publisher.user_name }}</span><br>
+
+                {% if user == post.publisher %}
+
+                    <a href="{% url 'update_post' post.pk %}">
+                        <button class="custom-btn margin_left" style="cursor: pointer">Edit</button>
+                    </a>
+                    <a href="{% url 'delete_post'  post.pk %}">
+                        <button class="custom-btn margin_left" style="cursor: pointer;background: red">Delete</button>
+                    </a>
+                {% endif %}
+
             </div>
+            <span class="index" style="display: block;margin-left:50px">{{ post.location }}</span>
             <p style="margin-top: 15px ;overflow: auto;padding:0 50px">
                 {{ post.content }}
             </p>
             <hr>
             <div class="margin_top " style="height: 50px">
-                <a href="{% url 'like' user.slug  post.id %}">
+                <a href="{% url 'like' post.id %}">
                     {% if state == 'liked' %}
                         <img src="{% static 'images/heart (4).svg' %}" alt="">
                     {% elif not state or state == 'unlike' %}
@@ -35,7 +53,8 @@
                     {% endif %}
 
                 </a><span class="index">{% like_number post as likes %} {{ likes }}like{{ likes|pluralize }}</span>
-                <button id="myBtn" class="myBtn"><img src="{% static 'images/chat.svg' %}" width="20px" height="20px" alt=""></button>
+                <button id="myBtn" class="myBtn"><img src="{% static 'images/chat.svg' %}" width="20px" height="20px"
+                                                      alt=""></button>
                 <span class="index">{% comment_number post as comments %} {{ comments }}comment{{ comments|pluralize }}</span>
                 <p class="index">{{ post.age }}</p>
                 <div id="myModal" class="modal">
@@ -43,12 +62,16 @@
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         {% for comment in post.comment_set.all %}
-                            <div>
+                            <div style="position: relative">
                                 {% get_user 'User' comment.person_id_id as comment_writer %}
                                 <img class="profile" src="{{ comment_writer.image.url }}" width="35px" height="35px"
                                      alt="">
                                 <span class="index">{{ comment_writer.user_name }}</span>
                                 <div style="width: 600px!important;word-wrap: break-word;margin-top:20px;">{{ comment.content }}</div>
+                                {% if user == post.publisher %}
+                                    <a href="{% url 'comment_delete' comment.id %}" class="index"
+                                       style="position: absolute;top:15px;right: 10px">x</a>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -58,7 +81,7 @@
             </div>
             <hr>
             <div class="comment">
-                <form action="{% url 'comment' user.slug post.id %}" class="dp_flex_align margin_top" method="post">
+                <form action="{% url 'comment' post.id %}" class="dp_flex_align margin_top" method="post">
                     {% csrf_token %}
                     <textarea class="comment_textarea" placeholder="Add a comment..." name="comment"></textarea>
                     <input style="cursor: pointer" type="submit" value="post">

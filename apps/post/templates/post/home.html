@@ -3,9 +3,10 @@
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
 {% block title %}Home{% endblock %}
-{% block home_url %}{% url 'home' user.slug %}{% endblock %}
-{% block add_url %}{% url 'new_post' user.slug %}{% endblock %}
-{% block profile_url %}{% url 'profile' user.slug %}{% endblock %}
+{% block home_url %}{% url 'home' %}{% endblock %}
+{% block add_url %}{% url 'new_post'  %}{% endblock %}
+{% block account_activity %}{% url 'account_activity'  %}{% endblock %}
+{% block profile_url %}{% url 'profile'  %}{% endblock %}
 {% block main %}
     <div style="display: flex;flex-direction: column;align-items: center">
         {% for post in posts %}
@@ -17,7 +18,7 @@
                 </div>
                 <img src="{{ post.image.url }}" alt="" width="400px" height="400px">
                 <div class="footer-post">
-                    <a href="{% url 'like' user.slug  post.id %}">
+                    <a href="{% url 'like'  post.id %}">
                         {% if user in post.like.all %}
                             <img src="{% static 'images/heart (4).svg' %}" alt="">
                         {% else %}
@@ -29,13 +30,13 @@
 
 
                     {#************************Comment**********************************#}
-                    <a href="{% url 'post_detail' user.slug post.id %}"><img src="{% static 'images/chat.svg' %}"
+                    <a href="{% url 'post_detail' post.id %}?next=home"><img src="{% static 'images/chat.svg' %}"
                                                                              width="20px" height="20px" alt=""></a>
                     <span class="index">{% comment_number post as comments %} {{ comments }}comment{{ comments|pluralize }}</span>
                     <p class="index">{{ post.age }}</p>
                     <div class="post_content_home_page">{{ post.content }}</div>
                     <div class="comment">
-                        <form action="{% url 'comment' user.slug post.id %}" class="dp_flex_align margin_top"
+                        <form action="{% url 'comment' post.id %}" class="dp_flex_align margin_top"
                               method="post">
                             {% csrf_token %}
                             <textarea class="comment_textarea" placeholder="Add a comment..." name="comment"></textarea>

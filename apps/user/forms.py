@@ -1,37 +1,35 @@
-from django import forms
-from django.core.exceptions import ValidationError
-
 from apps.user.models import User
-from common.constant import PHONE_PATTERN, EMAIL_PATTERN
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
-class SignUpForm(forms.ModelForm):
+class SignUpForm(UserCreationForm):
     """
     this Form create for sign up with two field username and password
     """
-    # for give contact info from user
-    contact = forms.CharField(max_length=50)
 
     class Meta:
         model = User
-        fields = ['full_name', 'user_name', 'password']
+        fields = ['full_name', 'user_name', 'email', 'phone_number']
 
-    def clean_contact(self):
-        """
-        set validation for contact field that most be in email or phone format
-        """
-        import re
-        contact = self.cleaned_data['contact']
-        if not (re.search(EMAIL_PATTERN, contact) or re.search(PHONE_PATTERN, contact)):
-            raise ValidationError('In ValidContact Info')
-        return self.cleaned_data['contact']
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('email') is None and cleaned_data.get('phone_number') is None:
+            self._errors['email'] = self._errors.get('email', [])
+            self._errors['email'].append('Please Enter Email or Phone number')
+        return cleaned_data
 
 
-class LoginForm(forms.ModelForm):
-    """
-    this form don`t do any special work and can be switch to simple for in front only for give user and pass
-    """
-
+class UserUpdateForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ['user_name', 'password']
+        fields = ('user_name', 'full_name', 'gender', 'bio', 'image', 'website', 'phone_number', 'email')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data['image'] is None or cleaned_data['image'] == False:
+            cleaned_data['image'] = 'user/default_profile.png'
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        del self.fields['password']
