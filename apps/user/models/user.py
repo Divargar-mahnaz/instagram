@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField('Phone number', max_length=11, blank=True, null=True, unique=True,
                                     validators=[check_phone_number])
     email = models.EmailField('Email', blank=True, null=True, unique=True)
+
     request_to = models.ManyToManyField('user.User', verbose_name='follow', symmetrical=False, through='user.Follow',
                                         related_name='request_from')
     slug = AutoSlugField(populate_from=['user_name'], unique=True, allow_unicode=True,
