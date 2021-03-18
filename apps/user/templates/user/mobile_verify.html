@@ -1,0 +1,23 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/user.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+<div class="sign-up-container" style="height: 300px">
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="number" name="code" placeholder={% translate 'Enter Your Code...' %} class="sms-verify">
+        <button type="submit" class="custom-btn" style="width:90px;height: 31px">{% translate 'confirm' %}</button>
+        <a href="{% url 'send-sms' user.slug %}" class="custom-btn" style="padding:6px 15px">{% translate 'Send again' %}</a>
+    </form>
+</div>
+</body>
+</html>

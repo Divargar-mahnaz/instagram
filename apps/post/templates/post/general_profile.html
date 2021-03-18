@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
-{% block title %}{% translate Profile %}{% endblock %}
+{% block title %}{% translate 'Profile' %}{% endblock %}
 {% block home_url %}{% url 'home' %}{% endblock %}
 {% block add_url %}{% url 'new_post' %}{% endblock %}
 {% block account_activity %}{% url 'account_activity' %}{% endblock %}
@@ -17,24 +17,25 @@
             {% if owner in user.following.all %}
                 <h2>{{ owner.user_name }}<a href="{% url 'request'  owner.slug %}"
                                             style="margin-left: 10px;">
-                    <button class="custom-btn" style="width: 70px;cursor: pointer">Unfollow</button>
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">{% translate 'Unfollow' %}</button>
                 </a></h2>
             {% elif owner in user.request_to.all %}
                 <h2>{{ owner.user_name }}<a href="{% url 'request' owner.slug %}"
                                             style="margin-left: 10px">
-                    <button class="custom-btn" style="width: 70px;cursor: pointer">cancel</button>
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">{% translate 'cancel' %}</button>
                 </a></h2>
             {% else %}
                 <h2>{{ owner.user_name }}<a href="{% url 'request'  owner.slug %}"
                                             style="margin-left: 10px">
-                    <button class="custom-btn" style="width: 70px;cursor: pointer">follow</button>
+                    <button class="custom-btn" style="width: 70px;cursor: pointer">{% translate 'follow' %}</button>
                 </a></h2>
             {% endif %}
 
 
             <div>
-                <span><span class="eng_number">{{ owner.post_set.count }}</span>
-                    {% translate 'post' %}{{ owner.post_set.count|pluralize }}</span>
+                <div style="display: inline-block"><span class="eng_number">{{ owner.post_set.count }}</span>
+                    {% blocktranslate count comments=owner.post_set.count %}post{% plural %}posts{% endblocktranslate %}
+                    </div>
                 <span class="margin_left">
                     <span class="eng_number">{{ owner.followers.count }}</span>
                     <button id="my-followers-Btn" class="myBtn">{% translate 'followers' %}</button>
@@ -89,7 +90,7 @@
         <div class="personal_post_layout">
             {% for post in owner.post_set.all %}
                 <a href="{% url 'post_detail' post.id %}?next={{ owner.slug }}"><img src="{{ post.image.url }}"
-                                                                                    alt=""></a>
+                                                                                     alt=""></a>
             {% endfor %}
         </div>
     </div>

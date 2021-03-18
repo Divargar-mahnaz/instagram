@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,27 @@
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/user/user.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
+
 <div class="sign-up-container">
-    <img style="margin-top: 50px" src="{% static 'images/user/logo.png' %}" alt="">
+    <img style="margin-top: 30px" src="{% static 'images/user/logo.png' %}" alt="">
+<form action="{% url 'set_language' %}" method="post" style="margin-top: 20px" class="select_lang">{% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}"/>
+        <select name="language">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+                        selected="selected"{% endif %}>
+                    {{ language.name_local }} ({{ language.code }})
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" class="custom-btn" value="{% translate 'Go' %}"/>
+    </form>
     <form method="post" class="sign-up-form">
 
         {% csrf_token %}
@@ -20,7 +38,7 @@
                 {#                    <small style="color: grey;font-size: 11px">{{ field.help_text }}</small>#}
                 {#                {% endif %}#}
                 {% for error in field.errors %}
-                    <p style="color: red;font-size: 11px">{{ error }}</p>
+                    <p style="color: red;font-size: 11px">{% translate error %}</p>
 
                 {% endfor %}
                 {% for error in form.non_field_errors %}
@@ -32,13 +50,61 @@
         {% if message %}
             <span class="wrong">{{ message }}</span>
         {% endif %}
-        <button type="submit" class="btn">Sign up</button>
+        <div id="select-validation" style="display: none">
+            <span class="index">{% translate 'validate with:' %}</span>
+            <input type="radio" style="display: inline-block;width: 15px;height: 15px" name="verification"
+                   value="email">
+            <label for="male" class="index">{% translate 'Email' %}</label>
+            <input type="radio" style="display: inline-block;width: 15px;height: 15px" name="verification"
+                   value="phone">
+            <label for="female" class="index">{% translate 'Phone' %}</label>
+        </div>
+
+        <button type="submit" class="btn">{% translate 'Sign up' %}</button>
 
     </form>
-    <p class="login-span">Have an account? <a href="{% url 'login' %}"> Log in</a></p>
+    <p class="login-span">{% translate 'Have an account?' %} <a href="{% url 'login' %}">{% translate 'Log in' %} </a>
+    </p>
 
 
 </div>
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/user/user.js' %}"></script>
+<script>
+    var is_email = 0
+    document.getElementById('id_email').addEventListener('input', function () {
+        let email = this.value
+        if (email.length > 12) {
+            is_email = 1
+        } else {
+            is_email = 0
+        }
+        if (is_email === 1 && is_phone_number === 1) {
+            document.getElementById('select-validation').style.display = 'block';
+        } else {
+            document.getElementById('select-validation').style.display = 'none';
+        }
+    });
+    var is_phone_number = 0
+    document.getElementById('id_phone_number').addEventListener('input', function () {
+        var phone_number = this.value
+        if (phone_number.length > 10) {
+            is_phone_number = 1
+        } else {
+            is_phone_number = 0
+        }
+        if (is_email === 1 && is_phone_number === 1) {
+            document.getElementById('select-validation').style.display = 'block';
+        } else {
+            document.getElementById('select-validation').style.display = 'none';
+        }
+    });
+
+    function updateValue(e) {
+        console.log('ok')
+    }
+
+
+</script>
 </body>
 </html>

@@ -3,10 +3,10 @@
 {% load i18n %}
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
-{% block title %}{% translate Profile %}{% endblock %}
+{% block title %}{% translate 'Profile' %}{% translate Profile %}{% endblock %}
 {% block home_url %}{% url 'home' %}{% endblock %}
 {% block add_url %}{% url 'new_post' %}{% endblock %}
-{% block account_activity %}{% url 'account_activity'%}{% endblock %}
+{% block account_activity %}{% url 'account_activity' %}{% endblock %}
 {% block profile_url %}{% url 'profile' %}{% endblock %}
 
 {% block main %}
@@ -17,8 +17,8 @@
         <div class="info">
             <h2>{{ user.user_name }}</h2>
             <div>
-                <span><span class="eng_number">{{ user.post_set.count }}</span>
-                    {% translate 'post' %}{{ user.post_set.count|pluralize }}</span>
+                <div style="display: inline-block"><span class="eng_number">{{ user.post_set.count }}</span>
+                    {% blocktrans count user.post_set.count as likes %}post{% plural %}posts{% endblocktrans %}</div>
                 <span class="margin_left">
                     <span class="eng_number">{{ user.followers.count }}</span>
                     <button id="my-followers-Btn" class="myBtn">{% translate 'followers' %}</button>
@@ -41,7 +41,7 @@
                     </div>
                 </span>
 
-                <span class="margin_left">
+                <div class="margin_left" style="display: inline-block">
                     <span class="eng_number">{{ user.following.count }}</span>
                     <button id="my-following-Btn" class="myBtn">{% translate 'following' %}</button>
                     <div id="my-following-Modal" class="modal">
@@ -60,7 +60,7 @@
                     </div>
 
                     </div>
-                </span>
+                </div>
 
                 <h4 class="margin_top">{{ user.full_name }}</h4>
                 <p style="height: 100px;width:300px;margin-top: 5px;font-weight: 100" class="margin_top">

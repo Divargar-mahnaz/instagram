@@ -7,6 +7,7 @@ from apps.post.forms import PostForm
 from apps.post.models import Post, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.user.models import User, Follow
+from django.utils.translation import ugettext_lazy as _
 
 
 class Home(LoginRequiredMixin, View):
@@ -73,9 +74,6 @@ class UpdatePost(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'post/new_post.html'
     form_class = PostForm
-
-    # fields = ['location', 'image', 'content']
-
     def get_success_url(self, **kwargs):
         return reverse_lazy("profile")
 
@@ -190,6 +188,9 @@ class FollowView(LoginRequiredMixin, View):
 
 
 class AccountActivity(LoginRequiredMixin, View):
+    """
+    if some one send request show to user
+    """
     def get(self, request):
         user = request.user
         applicants = Follow.objects.filter(to_user=user, accept=False)

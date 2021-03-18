@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from .constant import WEBSITE_PATTERN, PASSWORD_PATTERN, PHONE_PATTERN, USERNAME_PATTERN
 import re
-
+from django.utils.translation import ugettext_lazy as _
 
 def check_password(password):
     """
@@ -9,7 +9,7 @@ def check_password(password):
     """
     pattern = PASSWORD_PATTERN
     if not re.search(pattern, password):
-        raise ValidationError('your password must be at least 8 character and  digit and upper and lower letter')
+        raise ValidationError(_('your password must be at least 8 character and  digit and upper and lower letter'))
 
 
 def check_website(website):
@@ -18,7 +18,7 @@ def check_website(website):
     """
     pattern = WEBSITE_PATTERN
     if not re.search(pattern, website):
-        raise ValidationError('your website is invalid')
+        raise ValidationError(_('your website is invalid'))
 
 
 def check_phone_number(phone):
@@ -27,7 +27,7 @@ def check_phone_number(phone):
     """
     pattern = PHONE_PATTERN
     if not re.search(pattern, phone):
-        raise ValidationError('your phone number is invalid')
+        raise ValidationError(_('your phone number is invalid'))
 
 
 def check_user_name(user_name):
@@ -36,4 +36,4 @@ def check_user_name(user_name):
     """
     pattern = USERNAME_PATTERN
     if not re.search(USERNAME_PATTERN, user_name):
-        raise ValidationError('invalid user name')
+        raise ValidationError(_('invalid user name'))

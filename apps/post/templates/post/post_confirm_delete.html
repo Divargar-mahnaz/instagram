@@ -14,9 +14,10 @@
 <div class="popup_simulation">
     <div class="danger">
         <form method="post">{% csrf_token %}
-            <p>Are you sure you want to delete this post?</p>
-            <input class="custom-btn" style="background: red ;margin-top: 20px" type="submit" value="Delete">
-            <a href="{% url 'profile' %}" class="custom-btn" style="padding: 6px 8px">Cancel</a>
+            <p>{% translate 'Are you sure you want to delete this post?' %}</p>
+            <input class="custom-btn" style="background: red ;margin-top: 20px" type="submit"
+                   value="{% translate 'Delete' %}">
+            <a href="{% url 'profile' %}" class="custom-btn" style="padding: 6px 8px">{% translate 'Cancel' %}</a>
         </form>
 
     </div>

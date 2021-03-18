@@ -1,12 +1,13 @@
 {% extends 'bace.html' %}
 {% load static %}
+{% load i18n %}
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
-{% block title %}Home{% endblock %}
+{% block title %}{% translate 'Home' %}{% endblock %}
 {% block home_url %}{% url 'home' %}{% endblock %}
-{% block add_url %}{% url 'new_post'  %}{% endblock %}
-{% block account_activity %}{% url 'account_activity'  %}{% endblock %}
-{% block profile_url %}{% url 'profile'  %}{% endblock %}
+{% block add_url %}{% url 'new_post' %}{% endblock %}
+{% block account_activity %}{% url 'account_activity' %}{% endblock %}
+{% block profile_url %}{% url 'profile' %}{% endblock %}
 {% block main %}
     <div style="display: flex;flex-direction: column;align-items: center">
         {% for post in posts %}
@@ -25,21 +26,29 @@
                             <img src="{% static 'images/heart (3).svg' %}" alt="">
                         {% endif %}
 
-                    </a><span
-                        class="index">{% like_number post as likes %} <span style="font-family: Aria">{{ likes }}</span>like{{ likes|pluralize }}</span>
+                    </a>
+                    <span class="index">
+                        {{ post.like.count }}
+                        {% blocktranslate count likes=post.like.count %}like{% plural %}likes{% endblocktranslate %}
+                    </span>
 
 
                     {#************************Comment**********************************#}
-                    <a href="{% url 'post_detail' post.id %}?next=home"><img src="{% static 'images/chat.svg' %}"
-                                                                             width="20px" height="20px" alt=""></a>
-                    <span class="index">{% comment_number post as comments %} {{ comments }}comment{{ comments|pluralize }}</span>
+                    <a href="{% url 'post_detail' post.id %}?next=home">
+                        <img src="{% static 'images/chat.svg' %}" width="20px" height="20px" alt="">
+                    </a>
+                    <div class="index" style="display: inline-block">
+
+                    {{ post.comment_set.count }}
+                    {% blocktranslate count comments=post.comment_set.count %}comment{% plural %}comments{% endblocktranslate %}
+                    </div>
                     <p class="index">{{ post.age }}</p>
                     <div class="post_content_home_page">{{ post.content }}</div>
                     <div class="comment">
                         <form action="{% url 'comment' post.id %}" class="dp_flex_align margin_top"
                               method="post">
                             {% csrf_token %}
-                            <textarea class="comment_textarea" placeholder="Add a comment..." name="comment"></textarea>
+                            <textarea class="comment_textarea" placeholder={% translate "Add a comment..." %} name="comment"></textarea>
                             <input style="cursor: pointer;background: #F6F3F3;margin-left: 10px" type="submit"
                                    value="post">
                         </form>

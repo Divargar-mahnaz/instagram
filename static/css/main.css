@@ -316,7 +316,17 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+    height: 300px;
+    overflow: auto;
+}
+
+.modal-content-like {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
     height: 300px;
     overflow: auto;
 }
@@ -412,6 +422,19 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.select_lang_nav select {
+    width: 115px;
+    height: 30px;
+    font-family: IRANSans;
+    border: none;
+    border-radius: 5px;
+    background: #F3F3F3;
+    margin: 10px auto;
+    outline: none;
+    padding: 0 10px;
+    text-align: justify;
 }
 
 /*responsive */

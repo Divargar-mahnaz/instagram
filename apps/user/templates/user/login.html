@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,31 +16,29 @@
 
     {% if next %}
         {% if user.is_authenticated %}
-            <p>Your account doesn't have access to this page. To proceed,
-                please login with an account that has access.</p>
+            <p>{% translate "Your account doesn't have access to this page. To proceed,please login with an account that has access." %}</p>
         {% else %}
-            <p>Please login to see this page.</p>
+            <p>{% translate 'Please login to see this page.' %}</p>
         {% endif %}
     {% endif %}
     <form method="post" class="sign-up-form" action="{% url 'login' %}">
         {% if form.errors %}
-            <p class="wrong" style="font-size: 11px;width: 250px">Your username and password didn't match. Please try
-                again.</p>
+            <p class="wrong"
+               style="font-size: 11px;width: 250px">{% translate "Your username and password didn't match. Please try again." %}</p>
         {% endif %}
         {% csrf_token %}
         {{ form.username }}
         {{ form.password }}
-        <button type="submit" value="login" class="btn" onfocus="this.value=''">login</button>
+        <button type="submit" value="login" class="btn">{% translate 'login' %}</button>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-    <p class="login-span">Create an account? <a href="{% url 'sign_up' %}"> Sign Up</a></p>
+    <p><a href="{% url 'password_reset' %}">{% translate 'Lost password?' %}</a></p>
+    <p class="login-span">{% translate 'Create an account?' %} <a href="{% url 'sign_up' %}"> {% translate 'Sign Up' %}</a></p>
 </div>
 
 <script>
-    document.getElementById("id_username").placeholder = "username";
-    document.getElementById("id_username").value= "";
-    document.getElementById("id_password").placeholder = "Password";
+    document.getElementById("id_username").placeholder = {% translate "username" %};
+    document.getElementById("id_password").placeholder = {% translate "Password" %};
 
 
 </script>

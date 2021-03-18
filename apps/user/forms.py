@@ -1,6 +1,6 @@
 from apps.user.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
+from django.utils.translation import ugettext_lazy as _
 
 class SignUpForm(UserCreationForm):
     """
@@ -15,7 +15,7 @@ class SignUpForm(UserCreationForm):
         cleaned_data = super().clean()
         if cleaned_data.get('email') is None and cleaned_data.get('phone_number') is None:
             self._errors['email'] = self._errors.get('email', [])
-            self._errors['email'].append('Please Enter Email or Phone number')
+            self._errors['email'].append(_('Please Enter Email or Phone number'))
         return cleaned_data
 
 

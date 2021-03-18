@@ -13,6 +13,22 @@
 <body class="layout">
 <nav class="item-a">
     <div class="nav-container">
+
+        <form action="{% url 'set_language' %}" method="post" class="select_lang_nav">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ redirect_to }}"/>
+            <select name="language">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+                            selected="selected"{% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="submit" class="custom-btn" value="{% translate 'Go' %}"/>
+        </form>
         <div class="logo"><img src="{% static 'images/user/logo.png' %}" alt=""></div>
         <div class="search">
             {% include 'user/search.html' %}
@@ -33,8 +49,8 @@
                                                                      alt="Profile" width="30px"
                                                                      height="30px"></a>
                 <div class="dropdown-content">
-                    <a href="{% url 'logout' %}">Logout</a>
-                    <a href="{% url 'edit_profile' user.slug %}">Edit Profile</a>
+                    <a href="{% url 'logout' %}">{% translate 'Logout' %}</a>
+                    <a href="{% url 'edit_profile' user.slug %}">{% translate 'Edit Profile' %}</a>
                 </div>
             </div>
         </div>
@@ -48,9 +64,9 @@
 </div>
 <div class="item-c">
     <form action="" method="get">
-        <input type="text" placeholder="     Search..." id="selected_user" style="width: 120px!important;"
+        <input type="text" placeholder="{% translate 'Search...' %}" id="selected_user" style="width: 120px!important;"
                class="autocomplete_use_input">
-        <input type="button" id="search_user" class="custom-btn" value="search">
+        <input type="button" id="search_user" class="custom-btn" value={% translate 'search' %}>
     </form>
     <ul id="search_list" style="margin-top: 20px">
         {% get_all_user user as all_user %}
@@ -65,7 +81,9 @@
             </a>
         {% endfor %}
     </ul>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     <script>
+
         $("#selected_user").change(function () {
             var username = $(this).val();
 
@@ -79,7 +97,7 @@
                     if (data) {
                         $('#search_list li').remove();
                         {#$('search_list').clear()#}
-                        for (var x = 0; x < data.length; x++) {
+                        for (var x = 0; x < 10; x++) {
                             var content;
                             var owner_slug = data[x]['slug'];
                             content = "<a href='{% url 'general_profile'  0 %}'><li class='search_bar'>".replace('0', owner_slug);

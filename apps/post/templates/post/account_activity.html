@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load custom_tags %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
-{% block title %}New Post{% endblock %}
+{% block title %}{% translate 'account_activity' %}{% endblock %}
 {% block home_url %}{% url 'home' %}{% endblock %}
 {% block add_url %}{% url 'new_post' %}{% endblock %}
 {% block account_activity %}{% url 'account_activity' %}{% endblock %}
@@ -21,10 +21,10 @@
                         </a>
                     </div>
                     <a href="{% url 'follow' applicant.from_user.slug %}">
-                        <button class="custom-btn" style="cursor: pointer">Confirm</button>
+                        <button class="custom-btn" style="cursor: pointer">{% translate 'Confirm' %}</button>
                     </a>
                     <a href="{% url 'cancel_request' applicant.from_user.slug %}">
-                        <button class="custom-btn" style="cursor: pointer">Delete</button>
+                        <button class="custom-btn" style="cursor: pointer">{% translate 'Delete' %}</button>
                     </a>
 
                 </li>

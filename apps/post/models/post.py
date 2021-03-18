@@ -2,6 +2,8 @@ from django.db import models
 from .comment import Comment
 from django.utils import timezone
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+
 
 class Post(models.Model):
     """
@@ -12,11 +14,13 @@ class Post(models.Model):
     """
     create_date = models.DateTimeField(auto_now_add=True)
     publisher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    location = models.CharField('Location', max_length=200, blank=True)
-    image = models.ImageField('Image', upload_to='posts')
-    content = models.TextField('Content', blank=True)
-    like = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Like', blank=True, related_name='likes_set')
-    comments = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Comment, related_name='comments_set')
+    location = models.CharField(_('Location'), max_length=200, blank=True)
+    image = models.ImageField(_('Image'), upload_to='posts')
+    content = models.TextField(_('Content'), blank=True)
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('Like'), blank=True,
+                                  related_name='likes_set')
+    comments = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('comment'), through=Comment,
+                                      related_name='comments_set')
 
     class Meta:
         ordering = ['-create_date']
@@ -36,11 +40,11 @@ class Post(models.Model):
         now = timezone.now()
         age = now - self.create_date
         if age.days == 0 and age.seconds < 3600:
-            return ' recently '
+            return str(_(' recently '))
         if age.days == 0:
-            return str(age.seconds // 3600) + ' hours ago '
+            return str(age.seconds // 3600) + str(_('  hours ago '))
         if age.days < calendar.monthrange(self.create_date.year, self.create_date.month)[1]:
-            return str(age.days) + ' days ago '
+            return str(age.days) + str(_(' days ago '))
         if age.days < 365:
             result = 0
             days = age.days
@@ -55,25 +59,21 @@ class Post(models.Model):
                     month += 1
                     result += 1
                 elif days == 0:
-                    word = ' month ago'
+                    word = str(_(' month ago'))
                     if result > 1:
-                        word = ' months ago'
+                        word = str(_(' months ago'))
                     return str(result + 1) + word
                 else:
-                    word = ' month ago'
+                    word = str(_(' month ago'))
                     if result > 1:
-                        word = ' months ago'
+                        word = str(_(' months ago'))
                     return str(result) + word
         if age.days >= 365:
             year = age.days // 365
-            word = ' year ago'
+            word = str(_(' year ago'))
             if year > 1:
-                word = ' years ago'
+                word = str(_(' years ago'))
             return str(year) + word
 
     def __str__(self):
         return self.publisher.user_name + ':' + self.content[:10] + '...'
-
-    # def get_absolute_url(self):
-    #     from django.urls import reverse
-    #     return reverse('post_detail', args=[str(slug),])

@@ -1,19 +1,20 @@
 {% extends 'bace.html' %}
 {% load static %}
 {% load custom_tags %}
+{% load i18n %}
 {% block profile %}{% get_img 'User' user.slug %}{% endblock %}
-{% block title %}New Post{% endblock %}
+{% block title %}{% translate 'New Post' %}{% endblock %}
 {% block home_url %}{% url 'home' %}{% endblock %}
-{% block add_url %}{% url 'new_post'  %}{% endblock %}
+{% block add_url %}{% url 'new_post' %}{% endblock %}
 {% block account_activity %}{% url 'account_activity' %}{% endblock %}
-{% block profile_url %}{% url 'profile'  %}{% endblock %}
+{% block profile_url %}{% url 'profile' %}{% endblock %}
 {% block main %}
     <form class="add_post_form font" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
             <tr>
                 <th>
-                    Location
+                    {% translate 'Location' %}
                 </th>
                 <td>
                     {{ form.location.errors }}
@@ -22,7 +23,7 @@
             </tr>
             <tr>
                 <th>
-                    Caption
+                    {% translate 'Caption' %}
                 </th>
                 <td>
                     {{ form.content.errors }}
@@ -31,7 +32,7 @@
             </tr>
             <tr>
                 <th>
-                    Image
+                    {% translate 'Image' %}
                 </th>
                 <td>
                     {{ form.image.errors }}
@@ -41,7 +42,7 @@
             <tr>
                 <th></th>
                 <td>
-                    <button class="original-btn">save</button>
+                    <button class="original-btn">{% translate 'save' %}</button>
                 </td>
             </tr>
 

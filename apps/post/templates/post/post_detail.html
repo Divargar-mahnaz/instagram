@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Detail Post</title>
+    <title>{% translate 'Detail Post' %}</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
 </head>
@@ -23,7 +23,6 @@
                 <a href="{% url 'general_profile' request.GET.next %}"><img src="{% static 'images/logo/cancel.svg' %}"
                                                                             class="cancel"></a>
             {% endif %}
-            {#            <a href=" javascript:history.back()"><img src="{% static 'images/logo/cancel.svg' %}" class="cancel"></a>#}
             <div class="dp_flex_align">
                 <img class="profile" src="{{ post.publisher.image.url }}" width="35px"
                      height="35px"><span style="margin-left: 10px">{{ post.publisher.user_name }}</span><br>
@@ -31,10 +30,11 @@
                 {% if user == post.publisher %}
 
                     <a href="{% url 'update_post' post.pk %}">
-                        <button class="custom-btn margin_left" style="cursor: pointer">Edit</button>
+                        <button class="custom-btn margin_left" style="cursor: pointer">{% translate 'Edit' %}</button>
                     </a>
                     <a href="{% url 'delete_post'  post.pk %}">
-                        <button class="custom-btn margin_left" style="cursor: pointer;background: red">Delete</button>
+                        <button class="custom-btn margin_left"
+                                style="cursor: pointer;background: red">{% translate 'Delete' %}</button>
                     </a>
                 {% endif %}
 
@@ -52,12 +52,37 @@
                         <img src="{% static 'images/heart (3).svg' %}" alt="">
                     {% endif %}
 
-                </a><span class="index">{% like_number post as likes %} {{ likes }}like{{ likes|pluralize }}</span>
-                <button id="myBtn" class="myBtn"><img src="{% static 'images/chat.svg' %}" width="20px" height="20px"
-                                                      alt=""></button>
-                <span class="index">{% comment_number post as comments %} {{ comments }}comment{{ comments|pluralize }}</span>
+                </a>
+                <button id="like_Btn" class="myBtn"><span class="index">
+                    {{ post.like.count }}
+                    {% blocktranslate count likes=post.like.count %}like{% plural %}likes{% endblocktranslate %}
+
+                    </span>
+                </button>
+                <div id="Like_Modal" class="modal">
+                    <!-- Modal content -->
+                    <span class="close" style="position: relative;right: 550px">&times;</span>
+                    <div class="modal-content-like">
+
+                        {% for like in post.like.all %}
+                            <div style="position: relative">
+                                <img src="{{ like.image.url }}" width="40px" height="40px" class="profile" alt="">
+                                <span class="index">{{ like.user_name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <button id="comment_Btn" class="myBtn">
+                    <img src="{% static 'images/chat.svg' %}" width="20px" height="20px" alt="">
+                </button>
+
+                <span class="index">
+                    {{ post.comment_set.count }}
+                    {% blocktranslate count comments=post.comment_set.count %}comment{% plural %}comments{% endblocktranslate %}
+                </span>
                 <p class="index">{{ post.age }}</p>
-                <div id="myModal" class="modal">
+                <div id="comment_Modal" class="modal">
                     <!-- Modal content -->
                     <div class="modal-content">
                         <span class="close">&times;</span>
@@ -83,7 +108,8 @@
             <div class="comment">
                 <form action="{% url 'comment' post.id %}" class="dp_flex_align margin_top" method="post">
                     {% csrf_token %}
-                    <textarea class="comment_textarea" placeholder="Add a comment..." name="comment"></textarea>
+                    <textarea class="comment_textarea" placeholder="{% translate 'Add a comment...' %}"
+                              name="comment"></textarea>
                     <input style="cursor: pointer" type="submit" value="post">
                 </form>
             </div>
@@ -93,32 +119,6 @@
     </div>
 
 </div>
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
+<script src="{% static 'js/post/post_detail.js' %}"></script>
 </body>
 </html>
